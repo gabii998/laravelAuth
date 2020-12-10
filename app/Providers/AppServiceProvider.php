@@ -15,6 +15,11 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        //Solo para produccion
+        /*$this->app->bind('path.public', function () {
+            return base_path(__DIR__);
+            // Change httpdocs to public_html if you are using cpanel
+        });*/
     }
 
     /**

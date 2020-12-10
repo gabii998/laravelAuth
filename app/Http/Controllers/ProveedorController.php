@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
 class ProveedorController extends Controller
@@ -11,9 +12,10 @@ class ProveedorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        //
+        return response(Proveedor::all());
     }
 
     /**
@@ -34,7 +36,14 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+        ]);
+        if (Proveedor::create($request->all())) {
+            return response()->json([
+                'message' => 'Proveedor creado con exito'
+            ], 200);
+        }
     }
 
     /**
@@ -68,7 +77,14 @@ class ProveedorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ]);
+        if (Proveedor::find($id)->update($request->all())) {
+            return response()->json([
+                'message' => 'Actualizacion exitosa'
+            ], 200);
+        }
     }
 
     /**

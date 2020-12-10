@@ -23,7 +23,7 @@ class CreateInsumosTable extends Migration
             $table->timestamps();
             $table->foreign('proveedorId')
                 ->references('proveedorId')
-                ->on('proveedor')
+                ->on('proveedores')
                 ->onCascade('delete');
         });
     }

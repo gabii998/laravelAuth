@@ -12,6 +12,15 @@ class Insumo extends Model
     protected $primaryKey = 'insumoId';
 
     protected $fillable = [
-        'nombre', 'cantidad', 'unidad', 'costo'
+        'nombre', 'cantidad', 'unidad', 'costo', 'proveedorId'
     ];
+
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class, "proveedorId", "proveedorId");
+    }
+    public function compras()
+    {
+        return $this->belongsToMany(Compra::class, "insumo_compra", "insumoId");
+    }
 }

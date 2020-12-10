@@ -19,6 +19,13 @@ class InsumoController extends Controller
         return response()->json(['message' => null, 'data' => $insumo], 200);
     }
 
+    public function find($id)
+    {
+        $insumo = Insumo::get();
+        $filtrado = $insumo->where('proveedorId', $id);
+        return response()->json(['message' => null, 'data' => $filtrado], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -46,7 +53,8 @@ class InsumoController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        Insumo::create($request->all());
+        $insumo = Insumo::create($request->all());
+        //$insumo->proveedor()->sync($request['proveedorId']);
         return response()->json([
             'message' => 'registration successful'
         ], 200);

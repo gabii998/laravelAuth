@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clientes;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
@@ -36,6 +37,19 @@ class ClienteController extends Controller
         Clientes::whereId($id)->update($request->all());
         return response()->json([
             'message' => 'registration successful'
+        ], 200);
+    }
+    public function update(Request $request, $id)
+    {
+        //
+        $cliente = Clientes::find($id);
+
+        $cliente->nombre = $request['nombre'];
+        $cliente->ubicacion = $request['ubicacion'];
+        $cliente->mail = $request['mail'];
+        $cliente->save();
+        return response()->json([
+            'message' => 'update successful'
         ], 200);
     }
 }

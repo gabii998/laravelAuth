@@ -13,6 +13,7 @@ class Producto extends Model
     protected $fillable = [
         'nombre', 'cantidad', 'unidad', 'precioVenta', 'costo'
     ];
+    protected $hidden = ['pivot'];
 
     public function insumos()
     {
