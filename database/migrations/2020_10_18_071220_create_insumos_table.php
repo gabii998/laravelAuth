@@ -18,7 +18,6 @@ class CreateInsumosTable extends Migration
             $table->bigInteger('proveedorId')->unsigned();
             $table->string('nombre');
             $table->string('cantidad');
-            $table->string('unidad');
             $table->string('costo');
             $table->timestamps();
             $table->foreign('proveedorId')

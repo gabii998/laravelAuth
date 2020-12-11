@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Insumo;
+use App\Models\Cuenta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class InsumoController extends Controller
+class CuentaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,15 +15,7 @@ class InsumoController extends Controller
      */
     public function index()
     {
-        $insumo = Insumo::get();
-        return response()->json(['message' => null, 'data' => $insumo], 200);
-    }
-
-    public function find($id)
-    {
-        $insumo = Insumo::get();
-        $filtrado = $insumo->where('proveedorId', $id);
-        return response()->json(['message' => null, 'data' => $filtrado], 200);
+        return response()->json(['message' => null, 'data' => Cuenta::get()], 200);
     }
 
     /**
@@ -45,15 +37,19 @@ class InsumoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make(request()->all(), [
-            'nombre' => 'required',
-            'cantidad' => 'required',
-            'costo' => 'required'
+            "fecha" => "required",
+            "monto" => "required",
+            "tipo" => "required",
+            "descripcion" => "required",
+            "forma" => "required"
         ]);
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        $insumo = Insumo::create($request->all());
-        //$insumo->proveedor()->sync($request['proveedorId']);
+
+        $cuenta = Cuenta::create($request->all());
+
         return response()->json([
             'message' => 'registration successful'
         ], 200);
@@ -62,10 +58,10 @@ class InsumoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Cuenta  $cuenta
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cuenta $cuenta)
     {
         //
     }
@@ -73,10 +69,10 @@ class InsumoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Cuenta  $cuenta
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Cuenta $cuenta)
     {
         //
     }
@@ -85,30 +81,21 @@ class InsumoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Cuenta  $cuenta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cuenta $cuenta)
     {
         //
-        $insumo = Insumo::find($id);
-        $insumo->nombre = $request['nombre'];
-        $insumo->cantidad = $request['cantidad'];
-        $insumo->unidad = $request['unidad'];
-        $insumo->costo = $request['costo'];
-        $insumo->save();
-        return response()->json([
-            'message' => 'update successful'
-        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Cuenta  $cuenta
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cuenta $cuenta)
     {
         //
     }

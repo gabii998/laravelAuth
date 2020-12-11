@@ -15,7 +15,7 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        $productos = Producto::with("insumos:nombre,cantidad,unidad,costo")->get()->makeHidden(['created_at', 'updated_at', 'insumos.created_at']);
+        $productos = Producto::with("insumos:nombre,cantidad,costo")->get()->makeHidden(['created_at', 'updated_at', 'insumos.created_at']);
         return response()->json(['message' => null, 'data' => $productos], 200);
     }
 
@@ -45,8 +45,6 @@ class ProductoController extends Controller
         $validator = Validator::make(request()->all(), [
             'nombre' => 'required',
             'cantidad' => 'required',
-            'unidad' => 'required',
-
             'precioVenta' => 'required'
         ]);
         if ($validator->fails()) {

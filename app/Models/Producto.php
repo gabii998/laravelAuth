@@ -11,7 +11,7 @@ class Producto extends Model
     protected $primaryKey = 'productoId';
 
     protected $fillable = [
-        'nombre', 'cantidad', 'unidad', 'precioVenta', 'costo'
+        'nombre', 'cantidad', 'precioVenta', 'costo'
     ];
     protected $hidden = ['pivot'];
 

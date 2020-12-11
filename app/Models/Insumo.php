@@ -12,7 +12,7 @@ class Insumo extends Model
     protected $primaryKey = 'insumoId';
 
     protected $fillable = [
-        'nombre', 'cantidad', 'unidad', 'costo', 'proveedorId'
+        'nombre', 'cantidad', 'costo', 'proveedorId'
     ];
 
     public function proveedor()

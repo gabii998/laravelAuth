@@ -7,6 +7,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\CuentaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,10 @@ Route::post('/ventas', [VentaController::class, 'store']);
 Route::get('/proveedores', [ProveedorController::class, 'index']);
 Route::post('/proveedores', [ProveedorController::class, 'store']);
 Route::patch('/proveedores/{id}', [ProveedorController::class, 'update']);
+
+//Cuentas
+Route::get('/cuentas', [CuentaController::class, 'index']);
+Route::post('/cuentas', [CuentaController::class, 'store']);
 
 Route::resource('productos', ProductoController::class, ['only' => ['index', 'store']]);
 Route::resource('insumos', InsumoController::class, ['only' => ['index', 'store']]);
