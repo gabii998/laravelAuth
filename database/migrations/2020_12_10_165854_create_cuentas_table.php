@@ -21,7 +21,7 @@ class CreateCuentasTable extends Migration
             $table->string('descripcion');
             $table->string('forma');
             //Puede ser fecha de pago o fecha de cobro
-            $table->date('fechaPendiente');
+            $table->date('fechaPendiente')->nullable();
             $table->timestamps();
         });
     }

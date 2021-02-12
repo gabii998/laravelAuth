@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Compra;
+use App\Models\Cuenta;
+use App\Models\Insumo;
 use App\Models\InsumoCompra;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CompraController extends Controller
@@ -16,7 +19,7 @@ class CompraController extends Controller
      */
     public function index()
     {
-        return response()->json(['data' => Compra::with(["insumos", "insumos.insumo", "insumos.insumo.proveedor"])->get()]);
+        return response()->json(['data' => Compra::with(["insumos", "insumos.insumo", "proveedor"])->orderBy('fecha', 'DESC')->get()]);
     }
 
     /**
@@ -63,8 +66,24 @@ class CompraController extends Controller
             $insumo['compraId'] = $compra['compraId'];
             InsumoCompra::create($insumo);
 
+            $storedInsumo = Insumo::find($insumo['insumoId']);
+            $storedInsumo->cantidad = $storedInsumo->cantidad + ((int)$insumo['cantidad']);
+            $storedInsumo->save();
+
             //array_push($insumos, $insumo);
         }
+        $newDate = date('d-m-Y', strtotime($request["fecha"]));
+
+        $cuenta = Cuenta::create([
+            "fecha" => $request["fecha"],
+            "monto" => $request["total"],
+            "tipo" => "Egreso",
+            "descripcion" => "Compra el " . $newDate,
+            "forma" => $request['formaPago'],
+            "compraId" => $compra->compraId,
+            "fechaPendiente" => $request['fechaPendiente']
+        ]);
+
 
 
         //$compra->insumos()->sync($insumos);
@@ -113,8 +132,25 @@ class CompraController extends Controller
      * @param  \App\Models\Compra  $compra
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Compra $compra)
+    public function destroy($id)
     {
-        //
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        $cliente = Compra::find($id);
+        if ($cliente) {
+            Compra::destroy($id);
+        } else {
+            return response()->json([
+                'message' => 'Compra no encontrada'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' => 'Compra eliminada correctamente'
+        ], 200);
     }
 }

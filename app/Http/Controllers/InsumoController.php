@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Insumo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class InsumoController extends Controller
@@ -22,8 +23,8 @@ class InsumoController extends Controller
     public function find($id)
     {
         $insumo = Insumo::get();
-        $filtrado = $insumo->where('proveedorId', $id);
-        return response()->json(['message' => null, 'data' => $filtrado], 200);
+        $filtrado = $insumo->where('proveedorId', $id)->toArray();
+        return response()->json(['message' => null, 'data' => array_values($filtrado)], 200);
     }
 
     /**
@@ -110,6 +111,23 @@ class InsumoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        $cliente = Insumo::find($id);
+        if ($cliente) {
+            Insumo::destroy($id);
+        } else {
+            return response()->json([
+                'message' => 'Insumo no encontrado'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' => 'Insumo eliminado correctamente'
+        ], 200);
     }
 }

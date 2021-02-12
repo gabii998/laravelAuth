@@ -26,6 +26,6 @@ class Compra extends Model
 
     public function proveedor()
     {
-        return $this->hasOne(Proveedor::class);
+        return $this->hasOne(Proveedor::class, "proveedorId", "compra_proveedorId");
     }
 }

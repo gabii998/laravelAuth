@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
+Route::view('/', 'app');
 Route::view('/{path?}', 'app');

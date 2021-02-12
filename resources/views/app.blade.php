@@ -9,9 +9,9 @@
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <title>Gestión Demo</title>
-    <link href="css/2.d9ad5f5c.chunk.css" rel="stylesheet">
-    <link href="css/main.f892d3d2.chunk.css" rel="stylesheet">
+    <title>Administración - Solares de bautista</title>
+    <link href="/static/css/2.d9ad5f5c.chunk.css" rel="stylesheet">
+    <link href="/static/css/main.f892d3d2.chunk.css" rel="stylesheet">
 </head>
 
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
@@ -92,8 +92,8 @@
         r()
     }([])
     </script>
-    <script src="js/2.6c4640e9.chunk.js"></script>
-    <script src="js/main.94ebb40b.chunk.js"></script>
+    <script src="/static/js/2.c1b49f77.chunk.js"></script>
+    <script src="/static/js/main.12da17de.chunk.js"></script>
 </body>
 
 </html>

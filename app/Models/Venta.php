@@ -12,6 +12,7 @@ class Venta extends Model
         'fecha', 'venta_clienteId', 'total'
     ];
     protected $primaryKey = 'ventaId';
+    protected $table = "ventas";
 
     public function cliente()
     {
@@ -20,5 +21,9 @@ class Venta extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, "producto_venta")->withTimestamps();
+    }
+    public function productoVenta()
+    {
+        return $this->hasMany(ProductoVenta::class);
     }
 }

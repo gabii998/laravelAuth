@@ -14,6 +14,17 @@ class Cuenta extends Model
         'tipo',
         'descripcion',
         'forma',
-        'fechaPendiente'
+        'fechaPendiente',
+        'compraId',
+        'ventaId'
     ];
+
+    public function compra()
+    {
+        return $this->hasOne(Compra::class, "compraId", "compraId");
+    }
+    public function venta()
+    {
+        return $this->hasOne(Venta::class, "ventaId", "ventaId");
+    }
 }

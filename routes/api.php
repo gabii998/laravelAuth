@@ -29,22 +29,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/clientes', [ClienteController::class, 'listar']);
     Route::post('/clientes', [ClienteController::class, 'crear']);
     Route::patch('/clientes/{id}', [ClienteController::class, 'update']);
+    Route::delete('/clientes/{id}', [ClienteController::class, 'eliminar']);
     //Route::resource('productos', ProductoController::class, ['only' => ['index', 'store']]);
 });
 Route::get('/compras', [CompraController::class, 'index']);
 Route::post('/compras', [CompraController::class, 'store']);
+Route::delete('/compras/{id}', [CompraController::class, 'destroy']);
 Route::get('/ventas', [VentaController::class, 'index']);
 Route::post('/ventas', [VentaController::class, 'store']);
+Route::delete('/ventas/{id}', [VentaController::class, 'destroy']);
 Route::get('/proveedores', [ProveedorController::class, 'index']);
 Route::post('/proveedores', [ProveedorController::class, 'store']);
 Route::patch('/proveedores/{id}', [ProveedorController::class, 'update']);
+Route::delete('/proveedores/{id}', [ProveedorController::class, 'destroy']);
 
 //Cuentas
 Route::get('/cuentas', [CuentaController::class, 'index']);
 Route::post('/cuentas', [CuentaController::class, 'store']);
+Route::delete('/cuentas/{id}', [CuentaController::class, 'destroy']);
 
-Route::resource('productos', ProductoController::class, ['only' => ['index', 'store']]);
-Route::resource('insumos', InsumoController::class, ['only' => ['index', 'store']]);
+Route::resource('productos', ProductoController::class, ['only' => ['index', 'store', 'destroy']]);
+Route::resource('insumos', InsumoController::class, ['only' => ['index', 'store', 'destroy']]);
 Route::patch('productos/{id}', [ProductoController::class, 'edit']);
 Route::get('insumos/{id}', [InsumoController::class, 'find']);
 Route::patch('insumos/{id}', [InsumoController::class, 'update']);

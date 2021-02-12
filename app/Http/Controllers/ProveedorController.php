@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProveedorController extends Controller
 {
@@ -95,6 +96,23 @@ class ProveedorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        $cliente =  Proveedor::find($id);
+        if ($cliente) {
+            Proveedor::destroy($id);
+        } else {
+            return response()->json([
+                'message' => 'Proveedor no encontrado'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' => 'Proveedor eliminado correctamente'
+        ], 200);
     }
 }

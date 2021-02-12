@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Insumo;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
@@ -44,7 +46,7 @@ class ProductoController extends Controller
         //
         $validator = Validator::make(request()->all(), [
             'nombre' => 'required',
-            'cantidad' => 'required',
+
             'precioVenta' => 'required'
         ]);
         if ($validator->fails()) {
@@ -86,18 +88,40 @@ class ProductoController extends Controller
      */
     public function edit($id, Request $request)
     {
+        $user = Auth::user();
+
         $producto = Producto::find($id);
-        $producto->nombre = $request['nombre'];
-        $producto->cantidad = $request['cantidad'];
-        $producto->unidad = $request['unidad'];
-        $producto->precioVenta = $request['precioVenta'];
+        $cantidadOriginal = $producto->cantidad;
+        if ($producto->cantidad > $request['cantidad'] && $user->tipo != "root") {
+            return response()->json([
+                'message' => 'La cantidad no puede ser reducida manualmente'
+            ], 422);
+        }
+        $diferenciaCantidad = $request['cantidad'] - $producto->cantidad;
+        $temp = $producto->cantidad = $request['cantidad'];
+        //$arrayProductos = array();
+
         $producto->insumos()->detach();
-
         $producto->insumos()->sync($request['insumos']);
-        $producto->save();
 
+
+
+        if ((!isset($request['modificarInsumos']) && $user->tipo != "root") || $request['modificarInsumos'] == true) {
+            //Aqui se iteran los insumos para restar su cantidad
+            foreach ($request['insumos'] as $insumo) {
+                //Podria agregarse una verificacion en la cantidad, pero no lo considero necesario
+                $insumoTemp = Insumo::find($insumo['insumo_insumoId']);
+                $insumoDb = $producto->insumos()->find($insumo['insumo_insumoId']);
+                $nuevaCantidad = $insumoTemp->cantidad - ($diferenciaCantidad * $insumoDb['pivot']['cantidadUsada']);
+                $insumoTemp->cantidad = $nuevaCantidad;
+                $insumoTemp->save();
+            }
+        }
+
+        $producto->save();
         return response()->json([
-            'message' => 'update successful'
+            'message' => 'update successful',
+            'user' => Auth::user()
         ], 200);
     }
 
@@ -121,6 +145,23 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        $cliente = Producto::find($id);
+        if ($cliente) {
+            Producto::destroy($id);
+        } else {
+            return response()->json([
+                'message' => 'Producto no encontrado'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' => 'Producto eliminado correctamente'
+        ], 200);
     }
 }
