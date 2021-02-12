@@ -56,3 +56,4 @@ Route::patch('insumos/{id}', [InsumoController::class, 'update']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::get('/logout', [UserController::class, 'logout']);
+Route::get('/usuarios', [UserController::class, 'listar']);

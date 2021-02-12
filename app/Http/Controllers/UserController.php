@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -79,5 +80,15 @@ class UserController extends Controller
     {
         Auth::logout();
         return response()->json(['message' => 'Logged Out'], 200);
+    }
+
+    public function listar()
+    {
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        return response(ModelsUser::all(['name', 'email', 'tipo']));
     }
 }
