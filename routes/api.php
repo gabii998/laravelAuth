@@ -57,3 +57,6 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::get('/logout', [UserController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'listar']);
+Route::patch('/usuarios/{id}', [UserController::class, 'editar']);
+Route::delete('/usuarios/{id}', [UserController::class, 'destroy']);
+Route::post('/usuarios', [UserController::class, 'store']);

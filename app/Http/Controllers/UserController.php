@@ -82,6 +82,59 @@ class UserController extends Controller
         return response()->json(['message' => 'Logged Out'], 200);
     }
 
+    public function editar(Request $request, $id)
+    {
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+
+        $user = ModelsUser::find($id);
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->tipo = $request['tipo'];
+        if (isset($request['password']) && $request['password'] != '') {
+            $user->password = Hash::make($request['password']);
+        }
+        $user->save();
+
+        return response()->json([
+            'message' => 'update successful',
+            'data' => $user
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        $cliente = ModelsUser::find($id);
+        if ($cliente) {
+            ModelsUser::destroy($id);
+        } else {
+            return response()->json([
+                'message' => 'Usuario no encontrado'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' => 'Usuario eliminado correctamente'
+        ], 200);
+    }
+
+    public function store(Request $request)
+    {
+        $this->create($request->all());
+        return response()->json([
+            'message' => 'Usuario creado correctamente'
+        ], 200);
+    }
+
     public function listar()
     {
         if (Auth::user()->tipo != "root") {
@@ -89,6 +142,6 @@ class UserController extends Controller
                 'message' => 'No se autorizo la operacion'
             ], 200);
         }
-        return response(ModelsUser::all(['name', 'email', 'tipo']));
+        return response(ModelsUser::all(['name', 'email', 'tipo', 'id']));
     }
 }
