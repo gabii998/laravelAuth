@@ -6,6 +6,7 @@ use App\Models\Venta;
 use App\Models\Cuenta;
 use App\Models\Clientes;
 use App\Models\Producto;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Validator;
 class VentaController extends Controller
 {
     //
+    public function pendientesCobro()
+    {
+        return response()->json(['message' => null, 'data' => Cuenta::with(['venta', 'venta.cliente'])->where('forma', '=', 'cuenta')->whereDate('fechaPendiente', '>=', Carbon::now()->subDays(3))->orderBy('fecha', 'DESC')->get()], 200);
+    }
     public function index()
     {
         return response()->json(['data' => Venta::with(["cliente", "productoVenta", "productoVenta.producto"])->orderBy('fecha', 'DESC')->get()]);

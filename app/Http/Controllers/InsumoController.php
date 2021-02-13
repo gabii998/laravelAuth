@@ -20,6 +20,11 @@ class InsumoController extends Controller
         return response()->json(['message' => null, 'data' => $insumo], 200);
     }
 
+    public function alerta()
+    {
+        return ['data' => Insumo::with([])->where('cantidad', '<=', '10')->get()];
+    }
+
     public function find($id)
     {
         $insumo = Insumo::get();

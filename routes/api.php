@@ -36,6 +36,8 @@ Route::get('/compras', [CompraController::class, 'index']);
 Route::post('/compras', [CompraController::class, 'store']);
 Route::delete('/compras/{id}', [CompraController::class, 'destroy']);
 Route::get('/ventas', [VentaController::class, 'index']);
+Route::get('/ventas/pendientes', [VentaController::class, 'pendientesCobro']);
+
 Route::post('/ventas', [VentaController::class, 'store']);
 Route::delete('/ventas/{id}', [VentaController::class, 'destroy']);
 Route::get('/proveedores', [ProveedorController::class, 'index']);
@@ -51,7 +53,9 @@ Route::delete('/cuentas/{id}', [CuentaController::class, 'destroy']);
 Route::resource('productos', ProductoController::class, ['only' => ['index', 'store', 'destroy']]);
 Route::resource('insumos', InsumoController::class, ['only' => ['index', 'store', 'destroy']]);
 Route::patch('productos/{id}', [ProductoController::class, 'edit']);
+Route::get('insumos/alerta', [InsumoController::class, 'alerta']);
 Route::get('insumos/{id}', [InsumoController::class, 'find']);
+// Route::get('alertainsumos', [InsumoController::class, 'alerta']);
 Route::patch('insumos/{id}', [InsumoController::class, 'update']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);

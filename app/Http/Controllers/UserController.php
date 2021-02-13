@@ -69,6 +69,7 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Login successful',
                 'email' => auth()->user()['email'],
+                'tipo' => Auth::user()->tipo,
                 'id' => auth()->user()['id']
             ], 200);
         } else {
