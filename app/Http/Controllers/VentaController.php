@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caja;
 use App\Models\Venta;
 use App\Models\Cuenta;
 use App\Models\Clientes;
@@ -14,16 +15,24 @@ use Illuminate\Support\Facades\Validator;
 class VentaController extends Controller
 {
     //
+    // public function pendientesCobro()
+    // {
+    //     return response()->json(['message' => null, 'data' => Cuenta::with(['venta', 'venta.cliente'])->where('forma', '=', 'cuenta')->whereDate('fechaPendiente', '>=', Carbon::now()->subDays(3))->orderBy('fecha', 'DESC')->get()], 200);
+    // }
     public function pendientesCobro()
     {
         return response()->json(['message' => null, 'data' => Cuenta::with(['venta', 'venta.cliente'])->where('forma', '=', 'cuenta')->whereDate('fechaPendiente', '>=', Carbon::now()->subDays(3))->orderBy('fecha', 'DESC')->get()], 200);
     }
+
     public function index()
     {
         return response()->json(['data' => Venta::with(["cliente", "productoVenta", "productoVenta.producto"])->orderBy('fecha', 'DESC')->get()]);
     }
     public function store(Request $request)
     {
+        if (!isset($request['formaPago'])) {
+            $request['formaPago'] = "efectivo";
+        }
         $validator = Validator::make(request()->all(), [
             'fecha' => 'required',
             'total' => 'required',
@@ -54,19 +63,32 @@ class VentaController extends Controller
         }
 
         $venta->productos()->sync($prodsToSync);
+        $cliente = Clientes::find($request['venta_clienteId']);
+        $nombreCliente = $cliente['nombre'];
 
         $newDate = date('d-m-Y', strtotime($request["fecha"]));
-        $cuenta = Cuenta::create([
-            "fecha" => $request["fecha"],
-            "monto" => $request["total"],
-            "tipo" => "Ingreso",
-            "descripcion" => "Venta el " . $newDate,
-            "forma" => $request['formaPago'],
-            "ventaId" => $venta->ventaId,
-            "fechaPendiente" => $request['fechaPendiente']
-        ]);
 
-
+        //verificar origen, para ver si se guarda en cuenta o en caja
+        if ($request['origen'] == 'caja') {
+            $caja = Caja::create([
+                "fecha" => $request["fecha"],
+                "monto" => $request["total"],
+                "forma" => "efectivo",
+                "tipo" => "Ingreso",
+                "descripcion" => "Venta a " . $nombreCliente . " el " . $newDate,
+                "ventaId" => $venta->ventaId
+            ]);
+        } else if ($request['origen'] == 'cuenta') {
+            $cuenta = Cuenta::create([
+                "fecha" => $request["fecha"],
+                "monto" => $request["total"],
+                "tipo" => "Ingreso",
+                "descripcion" => "Venta a " . $nombreCliente . " el " . $newDate,
+                "forma" => $request['formaPago'],
+                "ventaId" => $venta->ventaId,
+                "fechaPendiente" => $request['fechaPendiente']
+            ]);
+        }
 
         //$cliente = Clientes::find($request['clienteId']);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caja;
 use App\Models\Compra;
 use App\Models\Cuenta;
 use App\Models\Insumo;
@@ -74,15 +75,30 @@ class CompraController extends Controller
         }
         $newDate = date('d-m-Y', strtotime($request["fecha"]));
 
-        $cuenta = Cuenta::create([
-            "fecha" => $request["fecha"],
-            "monto" => $request["total"],
-            "tipo" => "Egreso",
-            "descripcion" => "Compra el " . $newDate,
-            "forma" => $request['formaPago'],
-            "compraId" => $compra->compraId,
-            "fechaPendiente" => $request['fechaPendiente']
-        ]);
+
+        //verificar origen, para ver si se guarda en cuenta o en caja
+
+        if ($request['origen'] == 'caja') {
+            $caja = Caja::create([
+                "fecha" => $request["fecha"],
+                "monto" => $request["total"],
+                "forma" => "efectivo",
+                "tipo" => "Egreso",
+                "descripcion" => "Compra el " . $newDate,
+                "compraId" => $compra->compraId,
+            ]);
+        } else if ($request['origen'] == 'cuenta') {
+            $cuenta = Cuenta::create([
+                "fecha" => $request["fecha"],
+                "monto" => $request["total"],
+                "tipo" => "Egreso",
+                "descripcion" => "Compra el " . $newDate,
+                "forma" => $request['formaPago'],
+                "compraId" => $compra->compraId,
+                "fechaPendiente" => $request['fechaPendiente']
+            ]);
+        }
+
 
 
 

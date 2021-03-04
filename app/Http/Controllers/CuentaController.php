@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Compra;
 use App\Models\Cuenta;
 use App\Models\Venta;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +17,33 @@ class CuentaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function cambiarEstado($id)
+    {
+        $cliente = Cuenta::find($id);
+        if ($cliente) {
+            //var_dump($cliente);
+            if ($cliente['estado'] == "Impago") {
+                $cliente['estado'] = "Pago";
+                $cliente->save();
+            }
+        } else {
+            return response()->json([
+                'message' => 'Item de la cuenta no encontrado'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' =>
+            'Item de la cuenta eliminada correctamente'
+        ], 200);
+    }
+    public function pendientesPago()
+    {
+        return response()->json(['message' => null, 'data' => Cuenta::with([])->where('forma', '=', 'cuenta')->where('tipo', '=', 'Egreso')->whereDate('fechaPendiente', '>=', Carbon::now()->subDays(3))->orderBy('fecha', 'DESC')->get()], 200);
+    }
+
     public function index()
     {
         return response()->json(['message' => null, 'data' => Cuenta::with(['compra', 'venta', 'venta.cliente', 'compra.insumos', 'compra.proveedor', 'compra.insumos.insumo', 'venta.productoVenta', 'venta.productoVenta.producto'])->orderBy('fecha', 'DESC')->get()], 200);
@@ -52,6 +80,14 @@ class CuentaController extends Controller
         }
 
         $cuenta = Cuenta::create($request->all());
+
+        if ($request['forma'] == 'cuenta') {
+            $cuenta['estado'] = "Impago";
+        } else {
+            $cuenta['estado'] = "Pago";
+        }
+
+        $cuenta->save();
 
         return response()->json([
             'message' => 'registration successful'

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CajaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\InsumoController;
 use App\Http\Controllers\ProductoController;
@@ -46,9 +47,11 @@ Route::patch('/proveedores/{id}', [ProveedorController::class, 'update']);
 Route::delete('/proveedores/{id}', [ProveedorController::class, 'destroy']);
 
 //Cuentas
+Route::patch('/cuentas/estado/{id}', [CuentaController::class, 'cambiarEstado']);
 Route::get('/cuentas', [CuentaController::class, 'index']);
 Route::post('/cuentas', [CuentaController::class, 'store']);
 Route::delete('/cuentas/{id}', [CuentaController::class, 'destroy']);
+Route::get('/pagos/pendientes', [CuentaController::class, 'pendientesPago']);
 
 Route::resource('productos', ProductoController::class, ['only' => ['index', 'store', 'destroy']]);
 Route::resource('insumos', InsumoController::class, ['only' => ['index', 'store', 'destroy']]);
@@ -56,6 +59,11 @@ Route::patch('productos/{id}', [ProductoController::class, 'edit']);
 Route::get('insumos/alerta', [InsumoController::class, 'alerta']);
 Route::get('insumos/{id}', [InsumoController::class, 'find']);
 // Route::get('alertainsumos', [InsumoController::class, 'alerta']);
+
+Route::get('/caja', [CajaController::class, 'index']);
+Route::post('/caja', [CajaController::class, 'store']);
+
+
 Route::patch('insumos/{id}', [InsumoController::class, 'update']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
