@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File as FacadesFile;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,5 +18,9 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-Route::view('/', 'app');
-Route::view('/{path?}', 'app');
+Route::get('/', function () {
+    return FacadesFile::get('index.html');
+});
+Route::get('/{path?}', function () {
+    return FacadesFile::get('index.html');
+});
