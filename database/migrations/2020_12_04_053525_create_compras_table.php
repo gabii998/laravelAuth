@@ -19,7 +19,7 @@ class CreateComprasTable extends Migration
             $table->double('total');
             $table->bigInteger('compra_proveedorId')->unsigned();
             $table->foreign('compra_proveedorId')
-                ->references('proveedorId')->on('proveedores');
+                ->references('proveedorId')->on('proveedores')->onDelete("cascade");;
             $table->timestamps();
         });
     }

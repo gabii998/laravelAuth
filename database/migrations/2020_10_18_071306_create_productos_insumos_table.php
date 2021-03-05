@@ -21,10 +21,10 @@ class CreateProductosInsumosTable extends Migration
             $table->timestamps();
             $table->foreign('producto_productoId')
                 ->references('productoId')
-                ->on('productos');
+                ->on('productos')->onDelete("cascade");;
             $table->foreign('insumo_insumoId')
                 ->references('insumoId')
-                ->on('insumos');
+                ->on('insumos')->onDelete("cascade");;
         });
     }
 

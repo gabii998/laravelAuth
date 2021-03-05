@@ -62,7 +62,7 @@ Route::get('insumos/{id}', [InsumoController::class, 'find']);
 
 Route::get('/caja', [CajaController::class, 'index']);
 Route::post('/caja', [CajaController::class, 'store']);
-
+Route::delete('/caja/{id}', [CajaController::class, 'destroy']);
 
 Route::patch('insumos/{id}', [InsumoController::class, 'update']);
 Route::post('/login', [UserController::class, 'login']);

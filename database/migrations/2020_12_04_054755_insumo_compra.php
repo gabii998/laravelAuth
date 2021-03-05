@@ -23,11 +23,11 @@ class InsumoCompra extends Migration
 
             $table->foreign('insumoId')
                 ->references('insumoId')
-                ->on('insumos');
+                ->on('insumos')->onDelete("cascade");;
 
             $table->foreign('compraId')
                 ->references('compraId')
-                ->on('compras');
+                ->on('compras')->onDelete("cascade");;
         });
     }
 

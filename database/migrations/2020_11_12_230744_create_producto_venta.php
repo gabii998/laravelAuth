@@ -22,10 +22,10 @@ class CreateProductoVenta extends Migration
             $table->timestamps();
             $table->foreign('producto_productoId')
                 ->references('productoId')
-                ->on('productos');
+                ->on('productos')->onDelete("cascade");;
             $table->foreign('venta_ventaId')
                 ->references('ventaId')
-                ->on('ventas');
+                ->on('ventas')->onDelete("cascade");;
             //
         });
     }

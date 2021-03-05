@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Caja;
+use App\Models\Compra;
+use App\Models\Cuenta;
+use App\Models\Venta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CajaController extends Controller
 {
@@ -14,7 +18,7 @@ class CajaController extends Controller
      */
     public function index()
     {
-        return response()->json(["data" => Caja::all()]);
+        return response()->json(["data" => Caja::with(['compra', 'venta', 'venta.cliente', 'compra.insumos', 'compra.proveedor', 'compra.insumos.insumo', 'venta.productoVenta', 'venta.productoVenta.producto'])->orderBy('fecha', 'DESC')->get()]);
     }
 
     /**
@@ -92,8 +96,35 @@ class CajaController extends Controller
      * @param  \App\Models\Caja  $caja
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Caja $caja)
+    public function destroy($id)
     {
-        //
+        if (Auth::user()->tipo != "root") {
+            return response()->json([
+                'message' => 'No se autorizo la operacion'
+            ], 200);
+        }
+        $cliente = Caja::find($id);
+        if ($cliente) {
+            //var_dump($cliente);
+            if ($cliente['compraId'] != null) {
+                Compra::destroy($cliente['compraId']);
+            }
+            if ($cliente['ventaId'] != null) {
+                Venta::destroy($cliente['ventaId']);
+            }
+
+            Caja::destroy($id);
+        } else {
+            return response()->json([
+                'message' => 'Item de la cuenta no encontrado'
+            ], 200);
+        }
+
+
+        return response()->json([
+            'message' =>
+            'Item de la cuenta eliminada correctamente',
+            'data' => $cliente
+        ], 200);
     }
 }

@@ -20,7 +20,7 @@ class CreateVentasTable extends Migration
             $table->double('total');
             $table->timestamps();
             $table->foreign('venta_clienteId')
-                ->references('id')->on('clientes');
+                ->references('id')->on('clientes')->onDelete("cascade");;
         });
     }
 

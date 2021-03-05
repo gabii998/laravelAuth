@@ -18,10 +18,10 @@ class AddCompraYVentaACuenta extends Migration
             $table->bigInteger('ventaId')->unsigned()->nullable();
             $table->foreign('ventaId')
                 ->references('ventaId')
-                ->on('ventas');
+                ->on('ventas')->onDelete("cascade");;
             $table->foreign('compraId')
                 ->references('compraId')
-                ->on('compras');
+                ->on('compras')->onDelete("cascade");;
         });
     }
 

@@ -21,8 +21,8 @@ class CreateCajasTable extends Migration
             $table->enum('tipo', ['Compra', 'Venta', 'Ingreso', 'Egreso']);
             $table->bigInteger('compraId')->unsigned()->nullable();
             $table->bigInteger('ventaId')->unsigned()->nullable();
-            $table->foreign('compraId')->references('compraId')->on('compras');
-            $table->foreign('ventaId')->references('ventaId')->on('ventas');
+            $table->foreign('compraId')->references('compraId')->on('compras')->onDelete("cascade");;
+            $table->foreign('ventaId')->references('ventaId')->on('ventas')->onDelete("cascade");;
             $table->timestamps();
         });
     }
