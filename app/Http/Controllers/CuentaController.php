@@ -13,20 +13,49 @@ use Illuminate\Support\Facades\Validator;
 class CuentaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Update the specified resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
 
-    public function cambiarEstado($id)
+    public function update(Request $request, $id)
     {
-        $cliente = Cuenta::find($id);
-        if ($cliente) {
+        //Se modifica el original, 
+        //y si queda saldo pendiente, se crea otro item mas
+
+
+        $cuenta = Cuenta::find($id);
+        //$nuevoItem = $cuenta;
+
+
+
+        if ($cuenta) {
             //var_dump($cliente);
-            if ($cliente['estado'] == "Impago") {
-                $cliente['estado'] = "Pago";
-                $cliente->save();
+            // if ($cuenta['estado'] == "Impago") {
+            //     $cuenta['estado'] = "Pago";
+            //     $cuenta->save();
+            // }
+
+            if ($request['monto'] < $cuenta['monto']) {
+                $cuenta['estado'] = "Pago";
+                //Aca se crea otro item por la diferencia
+                $monto = $cuenta['monto'] - $request['monto'];
+
+                $nuevaCuenta = Cuenta::create([
+                    'fecha' => date('Y-m-d'),
+                    'estado' => "Impago",
+                    //'ventaId' => $cuenta['ventaId'],
+                    'tipo' => $cuenta['tipo'],
+                    'descripcion' => "Saldo pendiente",
+                    'forma' => "Saldo pendiente",
+                    'monto' => $monto
+                ]);
             }
+            $cuenta['fecha'] = date('Y-m-d');
+            $cuenta['forma'] = $request['forma'];
+            $cuenta->save();
         } else {
             return response()->json([
                 'message' => 'Item de la cuenta no encontrado'
@@ -36,7 +65,8 @@ class CuentaController extends Controller
 
         return response()->json([
             'message' =>
-            'Item de la cuenta eliminada correctamente'
+            'Item de la cuenta eliminada correctamente',
+            "monto" => $request['monto']
         ], 200);
     }
     public function pendientesPago()
@@ -123,10 +153,10 @@ class CuentaController extends Controller
      * @param  \App\Models\Cuenta  $cuenta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cuenta $cuenta)
-    {
-        //
-    }
+    // public function update(Request $request, Cuenta $cuenta)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.

@@ -47,7 +47,7 @@ Route::patch('/proveedores/{id}', [ProveedorController::class, 'update']);
 Route::delete('/proveedores/{id}', [ProveedorController::class, 'destroy']);
 
 //Cuentas
-Route::patch('/cuentas/estado/{id}', [CuentaController::class, 'cambiarEstado']);
+Route::post('/estado/{id}', [CuentaController::class, 'update']);
 Route::get('/cuentas', [CuentaController::class, 'index']);
 Route::post('/cuentas', [CuentaController::class, 'store']);
 Route::delete('/cuentas/{id}', [CuentaController::class, 'destroy']);

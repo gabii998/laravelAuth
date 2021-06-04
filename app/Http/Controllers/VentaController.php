@@ -56,6 +56,7 @@ class VentaController extends Controller
             unset($producto['insumos']);
             unset($producto['nombre']);
             unset($producto['unidad']);
+            unset($producto['costo']);
             array_push($prodsToSync, $producto);
             $storedProd = Producto::find($producto['producto_productoId']);
             $storedProd->cantidad = $storedProd->cantidad - $producto['cantidad'];
@@ -86,6 +87,7 @@ class VentaController extends Controller
                 "descripcion" => "Venta a " . $nombreCliente . " el " . $newDate,
                 "forma" => $request['formaPago'],
                 "ventaId" => $venta->ventaId,
+                "estado" => 'Impago',
                 "fechaPendiente" => $request['fechaPendiente']
             ]);
         }

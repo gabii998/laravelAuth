@@ -16,7 +16,8 @@ class Cuenta extends Model
         'forma',
         'fechaPendiente',
         'compraId',
-        'ventaId'
+        'ventaId',
+        'estado'
     ];
 
     public function compra()

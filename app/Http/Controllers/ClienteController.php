@@ -42,7 +42,8 @@ class ClienteController extends Controller
         $request->validate([
             'nombre' => 'required',
             'ubicacion' => 'required',
-            'mail' => 'required'
+            'mail' => 'required',
+            'telefono' => 'required'
         ]);
         Clientes::create($request->all());
         return response()->json([
@@ -55,7 +56,8 @@ class ClienteController extends Controller
         $request->validate([
             'nombre' => 'required',
             'ubicacion' => 'required',
-            'mail' => 'required'
+            'mail' => 'required',
+            'telefono' => 'required'
         ]);
         Clientes::whereId($id)->update($request->all());
         return response()->json([
@@ -70,6 +72,7 @@ class ClienteController extends Controller
         $cliente->nombre = $request['nombre'];
         $cliente->ubicacion = $request['ubicacion'];
         $cliente->mail = $request['mail'];
+        $cliente->telefono = $request['telefono'];
         $cliente->save();
         return response()->json([
             'message' => 'update successful'
