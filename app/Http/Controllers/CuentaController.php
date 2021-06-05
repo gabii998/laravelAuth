@@ -46,9 +46,9 @@ class CuentaController extends Controller
                 $nuevaCuenta = Cuenta::create([
                     'fecha' => date('Y-m-d'),
                     'estado' => "Impago",
-                    //'ventaId' => $cuenta['ventaId'],
+                    'ventaId' => $cuenta['ventaId'],
                     'tipo' => $cuenta['tipo'],
-                    'descripcion' => "Saldo pendiente",
+                    'descripcion' => "Saldo pendiente(" . $cuenta['descripcion'] . ")",
                     'forma' => "Saldo pendiente",
                     'monto' => $monto
                 ]);
