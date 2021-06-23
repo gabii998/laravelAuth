@@ -127,4 +127,24 @@ class CajaController extends Controller
             'data' => $cliente
         ], 200);
     }
+
+    public function getBalance(Request $request){
+        $total=0;
+        $ingresos=0;
+        $egresos=0;
+        $items = Caja::with(['compra', 'venta', 'venta.cliente', 'compra.insumos', 'compra.proveedor', 'compra.insumos.insumo', 'venta.productoVenta', 'venta.productoVenta.producto'])->orderBy('fecha', 'DESC')->get();
+
+        foreach ($items as $item) {
+            if($item['fecha'] == $request['periodo']){
+                if($item['tipo'] == "Ingreso"){
+                    $ingresos = $ingresos + $item['monto'];
+                }else if($item['tipo'] == "Egreso"){
+                    $egresos = $egresos + $item['monto'];
+                }
+            } 
+        }
+        $total = $ingresos - $egresos;
+        return response()->json(['balance'=>$total]);
+    }
+
 }
