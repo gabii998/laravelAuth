@@ -16,9 +16,9 @@ class CajaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($fecha)
     {
-        return response()->json(["data" => Caja::with(['compra', 'venta', 'venta.cliente', 'compra.insumos', 'compra.proveedor', 'compra.insumos.insumo', 'venta.productoVenta', 'venta.productoVenta.producto'])->orderBy('fecha', 'DESC')->get()]);
+        return response()->json(["data" => Caja::with(['compra', 'venta', 'venta.cliente', 'compra.insumos', 'compra.proveedor', 'compra.insumos.insumo', 'venta.productoVenta', 'venta.productoVenta.producto'])->where("fecha","=",$fecha)->orderBy('fecha', 'DESC')->get()]);
     }
 
     /**

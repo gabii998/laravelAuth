@@ -60,9 +60,11 @@ Route::get('insumos/alerta', [InsumoController::class, 'alerta']);
 Route::get('insumos/{id}', [InsumoController::class, 'find']);
 // Route::get('alertainsumos', [InsumoController::class, 'alerta']);
 
-Route::get('/caja', [CajaController::class, 'index']);
+Route::get('/caja/{fecha}', [CajaController::class, 'index']);
 Route::post('/caja', [CajaController::class, 'store']);
 Route::delete('/caja/{id}', [CajaController::class, 'destroy']);
+
+Route::post('/caja/balance',[CajaController::class,'getBalance']);
 
 Route::patch('insumos/{id}', [InsumoController::class, 'update']);
 Route::post('/login', [UserController::class, 'login']);
